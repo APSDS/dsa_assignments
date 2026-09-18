@@ -13,6 +13,7 @@ void insert(int arr[], int *n, int pos, int val) {
     (*n)++;
 }
 
+
 int main() {
     int arr[7] = {10, 20, 30, 40, 50};
     int n = 5;
