@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-// Function to perform Bidirectional Selection Sort
+
 void bidirectionalSelectionSort(int arr[], int size) {
     int start = 0;
     int end = size - 1;
