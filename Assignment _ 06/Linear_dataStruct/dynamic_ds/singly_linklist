@@ -118,6 +118,22 @@ void print(struct Node* head) {
     printf("NULL\n");
 }
 
+int search(struct Node* head, int key){
+    if (head == NULL)
+        return 0;
+
+    struct Node* current = head;
+
+    do{
+        if (current->data == key)
+            return 1;
+
+        current = current->next;
+    } while (current != head);
+
+    return 0;
+}
+
 
 int main() {
     struct Node* head = NULL;
