@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Structure of a node
+
 struct Node{
     int data;
     struct Node* next;
 };
 
-// Create a new node
+
 struct Node* createNode(int data){
     struct Node* node = malloc(sizeof *node);
 
@@ -21,7 +21,7 @@ struct Node* createNode(int data){
     return node;
 }
 
-// Insert a node at the beginning
+
 void insertAtBeginning(struct Node** head, int data){
     struct Node* node = createNode(data);
 
@@ -30,7 +30,7 @@ void insertAtBeginning(struct Node** head, int data){
     } else {
         struct Node* last = *head;
 
-        // Find the last node
+       
         while (last->next != *head)
             last = last->next;
 
@@ -41,7 +41,7 @@ void insertAtBeginning(struct Node** head, int data){
     *head = node;
 }
 
-// Insert a node at the end
+
 void insertAtEnd(struct Node** head, int data){
     if (*head == NULL) {
         insertAtBeginning(head, data);
@@ -58,7 +58,7 @@ void insertAtEnd(struct Node** head, int data){
     last->next = node;
 }
 
-// Insert at a specified zero-based position
+
 int insertAtPosition(struct Node** head, int data,
                      int position){
     if (position < 0)
@@ -74,7 +74,7 @@ int insertAtPosition(struct Node** head, int data,
 
     struct Node* current = *head;
 
-    // Move to the node before the insertion position
+ 
     for (int i = 0; i < position - 1; i++) {
         if (current->next == *head)
             return 0;
@@ -89,7 +89,7 @@ int insertAtPosition(struct Node** head, int data,
     return 1;
 }
 
-// Delete the first node
+
 void deleteFromBeginning(struct Node** head){
     if (*head == NULL)
         return;
@@ -98,7 +98,7 @@ void deleteFromBeginning(struct Node** head){
 
     if (old->next == old){
         
-        // Only one node exists
+        
         *head = NULL;
     } else{
         struct Node* last = old;
@@ -113,7 +113,7 @@ void deleteFromBeginning(struct Node** head){
     free(old);
 }
 
-// Delete the last node
+
 void deleteFromEnd(struct Node** head){
     if (*head == NULL)
         return;
@@ -126,7 +126,7 @@ void deleteFromEnd(struct Node** head){
 
     struct Node* current = *head;
 
-    // Find the second-last node
+    
     while (current->next->next != *head)
         current = current->next;
 
@@ -134,7 +134,7 @@ void deleteFromEnd(struct Node** head){
     current->next = *head;
 }
 
-// Delete a node at a specified zero-based position
+
 int deleteAtPosition(struct Node** head, int position){
     if (position < 0 || *head == NULL)
         return 0;
@@ -146,7 +146,7 @@ int deleteAtPosition(struct Node** head, int position){
 
     struct Node* current = *head;
 
-    // Move to the node before the deletion position
+   
     for (int i = 0; i < position - 1; i++){
         if (current->next == *head)
             return 0;
@@ -164,7 +164,7 @@ int deleteAtPosition(struct Node** head, int position){
     return 1;
 }
 
-// Display all nodes
+
 void display(struct Node* head){
     if (head == NULL) {
         printf("List is empty.\n");
@@ -181,7 +181,7 @@ void display(struct Node* head){
     printf("HEAD\n");
 }
 
-// Search for a value
+
 int search(struct Node* head, int key){
     if (head == NULL)
         return 0;
@@ -198,7 +198,7 @@ int search(struct Node* head, int key){
     return 0;
 }
 
-// Release all allocated nodes
+
 void freeList(struct Node** head){
     if (*head == NULL)
         return;
@@ -218,7 +218,7 @@ void freeList(struct Node** head){
 int main(void){
     struct Node* head = NULL;
 
-    // Insert nodes
+    
     insertAtEnd(&head, 10);
     insertAtEnd(&head, 20);
     insertAtBeginning(&head, 5);
@@ -232,12 +232,11 @@ int main(void){
     printf("After deletion: ");
     display(head);
 
-    // Search for an element
+   
     int key = 10;
     printf("Element %d is %sfound.\n", key,
            search(head, key) ? "" : "not ");
 
-    // Free allocated memory
     freeList(&head);
 
     return 0;
