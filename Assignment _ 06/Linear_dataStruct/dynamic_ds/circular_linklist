@@ -1,0 +1,244 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Structure of a node
+struct Node{
+    int data;
+    struct Node* next;
+};
+
+// Create a new node
+struct Node* createNode(int data){
+    struct Node* node = malloc(sizeof *node);
+
+    if (node == NULL) {
+        fprintf(stderr, "Memory allocation failed.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    node->data = data;
+    node->next = NULL;
+    return node;
+}
+
+// Insert a node at the beginning
+void insertAtBeginning(struct Node** head, int data){
+    struct Node* node = createNode(data);
+
+    if (*head == NULL){
+        node->next = node;
+    } else {
+        struct Node* last = *head;
+
+        // Find the last node
+        while (last->next != *head)
+            last = last->next;
+
+        node->next = *head;
+        last->next = node;
+    }
+
+    *head = node;
+}
+
+// Insert a node at the end
+void insertAtEnd(struct Node** head, int data){
+    if (*head == NULL) {
+        insertAtBeginning(head, data);
+        return;
+    }
+
+    struct Node* last = *head;
+
+    while (last->next != *head)
+        last = last->next;
+
+    struct Node* node = createNode(data);
+    node->next = *head;
+    last->next = node;
+}
+
+// Insert at a specified zero-based position
+int insertAtPosition(struct Node** head, int data,
+                     int position){
+    if (position < 0)
+        return 0;
+
+    if (position == 0){
+        insertAtBeginning(head, data);
+        return 1;
+    }
+
+    if (*head == NULL)
+        return 0;
+
+    struct Node* current = *head;
+
+    // Move to the node before the insertion position
+    for (int i = 0; i < position - 1; i++) {
+        if (current->next == *head)
+            return 0;
+
+        current = current->next;
+    }
+
+    struct Node* node = createNode(data);
+    node->next = current->next;
+    current->next = node;
+
+    return 1;
+}
+
+// Delete the first node
+void deleteFromBeginning(struct Node** head){
+    if (*head == NULL)
+        return;
+
+    struct Node* old = *head;
+
+    if (old->next == old){
+        
+        // Only one node exists
+        *head = NULL;
+    } else{
+        struct Node* last = old;
+
+        while (last->next != old)
+            last = last->next;
+
+        *head = old->next;
+        last->next = *head;
+    }
+
+    free(old);
+}
+
+// Delete the last node
+void deleteFromEnd(struct Node** head){
+    if (*head == NULL)
+        return;
+
+    if ((*head)->next == *head){
+        free(*head);
+        *head = NULL;
+        return;
+    }
+
+    struct Node* current = *head;
+
+    // Find the second-last node
+    while (current->next->next != *head)
+        current = current->next;
+
+    free(current->next);
+    current->next = *head;
+}
+
+// Delete a node at a specified zero-based position
+int deleteAtPosition(struct Node** head, int position){
+    if (position < 0 || *head == NULL)
+        return 0;
+
+    if (position == 0){
+        deleteFromBeginning(head);
+        return 1;
+    }
+
+    struct Node* current = *head;
+
+    // Move to the node before the deletion position
+    for (int i = 0; i < position - 1; i++){
+        if (current->next == *head)
+            return 0;
+
+        current = current->next;
+    }
+
+    if (current->next == *head)
+        return 0;
+
+    struct Node* old = current->next;
+    current->next = old->next;
+    free(old);
+
+    return 1;
+}
+
+// Display all nodes
+void display(struct Node* head){
+    if (head == NULL) {
+        printf("List is empty.\n");
+        return;
+    }
+
+    struct Node* current = head;
+
+    do {
+        printf("%d -> ", current->data);
+        current = current->next;
+    } while (current != head);
+
+    printf("HEAD\n");
+}
+
+// Search for a value
+int search(struct Node* head, int key){
+    if (head == NULL)
+        return 0;
+
+    struct Node* current = head;
+
+    do{
+        if (current->data == key)
+            return 1;
+
+        current = current->next;
+    } while (current != head);
+
+    return 0;
+}
+
+// Release all allocated nodes
+void freeList(struct Node** head){
+    if (*head == NULL)
+        return;
+
+    struct Node* current = (*head)->next;
+
+    while (current != *head) {
+        struct Node* next = current->next;
+        free(current);
+        current = next;
+    }
+
+    free(*head);
+    *head = NULL;
+}
+
+int main(void){
+    struct Node* head = NULL;
+
+    // Insert nodes
+    insertAtEnd(&head, 10);
+    insertAtEnd(&head, 20);
+    insertAtBeginning(&head, 5);
+    insertAtPosition(&head, 15, 2);
+
+    printf("Circular Linked List: ");
+    display(head);
+    deleteFromEnd(&head);
+    deleteAtPosition(&head, 1);
+
+    printf("After deletion: ");
+    display(head);
+
+    // Search for an element
+    int key = 10;
+    printf("Element %d is %sfound.\n", key,
+           search(head, key) ? "" : "not ");
+
+    // Free allocated memory
+    freeList(&head);
+
+    return 0;
+}
